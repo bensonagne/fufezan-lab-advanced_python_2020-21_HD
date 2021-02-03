@@ -6,4 +6,6 @@ Course covers:
 * Recap (Python beginner level)
 
 
+!!
+
 <img src="jupyter/imgs/cc.png" alt="drawing" width="200"/>
