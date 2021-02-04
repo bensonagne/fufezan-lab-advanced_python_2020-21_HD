@@ -4,6 +4,11 @@ import plotly.graph_objects as go
 
 
 def extract_sequence_from_fasta(fasta):
+    """
+    Extracts the amino-acid sequence from the fasta file into a list
+    :param fasta: fasta file
+    :return: list containing the one letter code of the amino acids in the given sequence
+    """
     with open(fasta, 'r') as file:
         # return [protein_list for line in file.readlines() if not line.startswith('>') for protein_list in
         # line.strip()]
@@ -19,6 +24,12 @@ def extract_sequence_from_fasta(fasta):
 
 
 def dictionary_from_csv(csv):
+    """
+    Makes a dictionary from a csv files with the column '1-letter code' as keys and the column
+    'hydropathy index (Kyte-Doolittle method)' as values.
+    :param csv: csv file
+    :return: dictionary with the 1-letter code as keys and the corresponding hydropathy as values
+    """
     data = pd.read_csv(csv)
     # return pd.Series(data = data['hydropathy index (Kyte-Doolittle method)'].values, index = data['1-letter code'])
     data = data.to_dict()
@@ -29,6 +40,14 @@ def dictionary_from_csv(csv):
 
 
 def hydropathy_value_list_of_sequence(sequence, mapping_dict, window_len=None):
+    """
+    returns a list that contains the corresponding hydropathy values of the amino acids in the given sequence.
+    :param sequence: list of the amino-acid sequence that should be compared
+    :param mapping_dict: dictionary with the 1-letter code as keys and the corresponding hydropathy as values
+    :param window_len: length of the sliding window
+    :return: list containing the corresponding hydropathy of the amino-acid sequence (averaged in the given sliding
+    window)
+    """
     hydropathy_list = [mapping_dict[aa] for aa in sequence]
 
     if window_len is not None:
@@ -42,15 +61,27 @@ def hydropathy_value_list_of_sequence(sequence, mapping_dict, window_len=None):
     return hydropathy_list
 
 
-# plot bar charts
-first = extract_sequence_from_fasta('gpcr.fasta')
-second = dictionary_from_csv('amino_acid_properties.csv')
-hydropathy_liste = hydropathy_value_list_of_sequence(first, second)
-print(hydropathy_liste)
-position_list = list(range(361))
+def plot_bar_chart(x_values, y_values, title: str):
+    """
+    Plots a bar chart with the position of the amino acid on the x-axis and the corresponding hydropathy on the y-axis
+    and a given title
+    :param x_values: list of the position of the amino acids
+    :param y_values: list of the hydropathy values a the specific positions
+    :param title: Title of the plot
+    :return: Bar Chart
+    """
+    data_fig = [go.Bar(x=x_values, y=y_values)]
+    fig = go.Figure(data=data_fig)
+    fig.update_layout(title=title,
+                      yaxis=dict(title='hydropathy'), xaxis=dict(title='position in the sequence'))
+    fig.show()
 
-data_fig = [go.Bar(x=position_list, y=hydropathy_liste)]
-fig = go.Figure(data=data_fig)
-fig.update_layout(title="Hydropathy plot without a sliding window",
-                  yaxis=dict(title='hydropathy'), xaxis=dict(title='position in the sequence'))
-fig.show()
+
+if __name__ == '__main__':
+    # plot bar charts
+    first = extract_sequence_from_fasta('gpcr.fasta')
+    second = dictionary_from_csv('amino_acid_properties.csv')
+    result = hydropathy_value_list_of_sequence(first, second)
+    position_list = list(range(len(result)))
+    print(result)
+    plot_bar_chart(position_list, result, "Hydropathy plot without a sliding window")
