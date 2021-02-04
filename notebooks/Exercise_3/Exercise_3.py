@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 
 def extract_sequence_from_fasta(fasta):
     with open(fasta, 'r') as file:
+        # return [protein_list for line in file.readlines() if not line.startswith('>') for protein_list in
+        # line.strip()]
         read_data = file.read()
         read_data_split = read_data.split('\n')
 
@@ -18,7 +20,8 @@ def extract_sequence_from_fasta(fasta):
 
 def dictionary_from_csv(csv):
     data = pd.read_csv(csv)
-    data = pd.DataFrame.to_dict(data)
+    # return pd.Series(data = data['hydropathy index (Kyte-Doolittle method)'].values, index = data['1-letter code'])
+    data = data.to_dict()
     list_1lettercode = data['1-letter code'].values()
     list_hydropathy = data['hydropathy index (Kyte-Doolittle method)'].values()
     dictionary = dict(zip(list_1lettercode, list_hydropathy))
@@ -26,16 +29,12 @@ def dictionary_from_csv(csv):
 
 
 def hydropathy_value_list_of_sequence(sequence, mapping_dict, window_len=None):
-    hydropathy_list = []
-    for aa in sequence:
-        for key in mapping_dict.keys():
-            if aa == key:
-                hydropathy_list.append(mapping_dict[key])
+    hydropathy_list = [mapping_dict[aa] for aa in sequence]
 
-    if not window_len is None:
+    if window_len is not None:
         window = deque([], window_len)
         average_list = []
-        for pos, hydropathy in enumerate(hydropathy_list):
+        for hydropathy in hydropathy_list:
             window.append(hydropathy)
             average = sum(window) / len(window)
             average_list.append(average)
@@ -46,11 +45,12 @@ def hydropathy_value_list_of_sequence(sequence, mapping_dict, window_len=None):
 # plot bar charts
 first = extract_sequence_from_fasta('gpcr.fasta')
 second = dictionary_from_csv('amino_acid_properties.csv')
-hydropathy_list = hydropathy_value_list_of_sequence(first, second)
+hydropathy_liste = hydropathy_value_list_of_sequence(first, second)
+print(hydropathy_liste)
 position_list = list(range(361))
 
-data = [go.Bar(x=position_list, y=hydropathy_list)]
-fig = go.Figure(data=data)
+data_fig = [go.Bar(x=position_list, y=hydropathy_liste)]
+fig = go.Figure(data=data_fig)
 fig.update_layout(title="Hydropathy plot without a sliding window",
                   yaxis=dict(title='hydropathy'), xaxis=dict(title='position in the sequence'))
 fig.show()
