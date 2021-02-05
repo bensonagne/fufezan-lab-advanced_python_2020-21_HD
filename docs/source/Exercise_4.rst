@@ -1,7 +1,7 @@
-.. _Ex4.rst:
+.. _Exercise_4.rst:
 
-Ex4 module
-===========
+Exercise_4 module
+==================
 
 .. automodule:: Ex4.Exercise_4
     :members:

@@ -69,8 +69,8 @@ def get_lookup_dict(csv):
         csv: csv-file
 
     Returns:
-        nested dictionary containing different amino acid properties and the corresponding values
-    assigned to the 1-letter amino acid code
+        nested dictionary containing different amino acid properties and the corresponding values assigned to the
+        1-letter amino acid code
 
     """
     aa_properties_dict = pd.read_csv(csv)
@@ -112,7 +112,8 @@ if __name__ == '__main__':
     p1 = Protein('P32249')
     sequence = p1.get_data()
     lookup_dictionary = get_lookup_dict('amino_acid_properties.csv')
-    result_list = p1.map(lookup_dictionary, 'hydropathy index (Kyte-Doolittle method)', 10)
+    print(lookup_dictionary)
+    result_list = p1.map(lookup_dictionary, 'hydropathy index (Kyte-Doolittle method)')
     position_list = list(range(len(result_list)))
     print(result_list)
     plot_bar_chart(position_list, result_list, "Hydropathy plot of P32249 with a sliding window of 10")
