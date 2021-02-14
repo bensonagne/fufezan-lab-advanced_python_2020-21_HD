@@ -28,7 +28,7 @@ def test_get_data():
 
 def test_map():
     p1 = Protein('P32249')
-    lookup_dictionary = get_lookup_dict('amino_acid_properties.csv')
+    lookup_dictionary = get_lookup_dict('/Users/smantz/PycharmProjects/fufezan-lab-advanced_python_2020-21_HD_fork/data/amino_acid_properties.csv')
     result_list = p1.map(lookup_dictionary, 'hydropathy index (Kyte-Doolittle method)')
     assert result_list == [1.9, -3.5, 4.5, -3.5, 1.9, 1.8, -3.5, -3.5, 2.8, -0.7, -1.6, -1.6, -0.8, 1.8, -0.7, -1.6,
                            -3.5, -0.4, -3.5, -3.5, 2.5, -3.5, 3.8, -1.3, 1.8, -3.2, -3.2, -0.8, -0.7, 1.8, -4.5, 4.5,
