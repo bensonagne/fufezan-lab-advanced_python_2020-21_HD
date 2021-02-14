@@ -1,5 +1,5 @@
-from numpy import nan
-from Ex4.Exercise_4 import Protein, get_lookup_dict
+from Ex4.Protein import Protein
+from Ex4.Ex4_functions import get_lookup_dict
 
 
 def test_get_data():

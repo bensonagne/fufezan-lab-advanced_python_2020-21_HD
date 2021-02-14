@@ -11,7 +11,4 @@ def plot_aa_histogram(counter_as):
     plt.title('aminoacid distribution')
     plt.xlabel('1-letter-code of aminoacids')
     plt.ylabel('aminoacid count')
-    plt.yticks(np.arange(0, 1200000, 50000))
     plt.show()
-
-

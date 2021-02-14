@@ -85,9 +85,9 @@ def plot_bar_chart(x_values, y_values, title: str):
         Bar Chart
 
     """
-    data_fig = [go.Bar(x=x_values, y=y_values)]
+    data_fig = [go.Bar(x=x_values, y=y_values, marker_color="white")]
     fig = go.Figure(data=data_fig)
-    fig.update_layout(title=title,
+    fig.update_layout(template='plotly_dark', title=title,
                       yaxis=dict(title='hydropathy'), xaxis=dict(title='position in the sequence'))
     fig.show()
 
@@ -95,7 +95,7 @@ def plot_bar_chart(x_values, y_values, title: str):
 if __name__ == '__main__':
     first = extract_sequence_from_fasta('gpcr.fasta')
     second = dictionary_from_csv('amino_acid_properties.csv')
-    result = hydropathy_value_list_of_sequence(first, second)
+    result = hydropathy_value_list_of_sequence(first, second, 20)
     position_list = list(range(len(result)))
     print(result)
-    plot_bar_chart(position_list, result, "Hydropathy plot without a sliding window")
+    plot_bar_chart(position_list, result, "Hydropathy plot with a sliding window of 20")
